@@ -24,22 +24,23 @@ a:hover { color:#f0a75a; }
 .gov-tile.empty { opacity:0.4; }
 .gov-hotspot { position:absolute; background:rgba(224,138,60,0); border:2px solid rgba(224,138,60,0); border-radius:8px; cursor:pointer; padding:0; transition:transform .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease; transform:scale(1); z-index:1; }
 .gov-hotspot:hover, .gov-hotspot:focus-visible { background:rgba(224,138,60,0.22); border-color:rgba(224,138,60,0.85); box-shadow:0 0 24px rgba(224,138,60,0.45); transform:scale(1.12); z-index:50; outline:none; }
-.curl-loader-wrap { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:20px 0; }
-.curl-loader { position:relative; width:80px; height:96px; }
-.curl-shoulder { position:absolute; top:0; left:50%; width:20px; height:20px; margin-left:-10px; background:#e08a3c; border-radius:50%; z-index:2; }
-.curl-upper-arm { position:absolute; top:10px; left:50%; width:14px; height:38px; margin-left:-7px; background:#e08a3c; border-radius:7px; z-index:1; }
-.curl-forearm { position:absolute; top:46px; left:50%; width:11px; height:42px; margin-left:-5.5px; background:#cbbcae; border-radius:5.5px; transform-origin:top center; animation:curl-rep 1.15s ease-in-out infinite; z-index:1; }
-.curl-dumbbell { position:absolute; bottom:-6px; left:50%; width:38px; height:12px; margin-left:-19px; }
-.curl-dumbbell .curl-bar { position:absolute; top:50%; left:50%; width:20px; height:4px; background:#f5ede4; transform:translate(-50%,-50%); border-radius:2px; }
-.curl-dumbbell .curl-plate { position:absolute; top:50%; width:10px; height:24px; background:#161210; border:2px solid #e08a3c; border-radius:3px; transform:translateY(-50%); }
+.curl-loader-wrap { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:20px 0; }
+.curl-loader { position:relative; width:130px; height:150px; }
+.curl-shoulder { position:absolute; top:0; left:50%; width:28px; height:28px; margin-left:-14px; background:#e08a3c; border-radius:50%; z-index:2; box-shadow:0 2px 6px rgba(0,0,0,0.4); }
+.curl-upper-arm { position:absolute; top:15px; left:50%; width:19px; height:48px; margin-left:-9.5px; background:#e08a3c; border-radius:9.5px; z-index:1; }
+.curl-forearm { position:absolute; top:58px; left:50%; width:15px; height:54px; margin-left:-7.5px; background:#cbbcae; border-radius:7.5px; transform-origin:top center; animation:curl-rep 2s ease-in-out infinite; z-index:1; }
+.curl-dumbbell { position:absolute; bottom:-16px; left:50%; width:64px; height:30px; margin-left:-32px; }
+.curl-dumbbell .curl-bar { position:absolute; top:50%; left:50%; width:28px; height:7px; background:#f5ede4; transform:translate(-50%,-50%); border-radius:3.5px; }
+.curl-dumbbell .curl-plate { position:absolute; top:50%; width:28px; height:28px; background:#161210; border:5px solid #e08a3c; border-radius:50%; transform:translateY(-50%); box-shadow:0 2px 6px rgba(0,0,0,0.4); }
 .curl-dumbbell .curl-plate-l { left:0; }
 .curl-dumbbell .curl-plate-r { right:0; }
-.curl-loader-text { color:#a3937f; font-size:14px; font-weight:700; }
+.curl-loader-text { color:#f5ede4; font-size:15px; font-weight:700; }
 @keyframes curl-rep {
-  0%, 12% { transform:rotate(8deg); }
-  50% { transform:rotate(-135deg); }
-  88%, 100% { transform:rotate(8deg); }
+  0%, 10% { transform:rotate(8deg); }
+  50% { transform:rotate(-140deg); }
+  90%, 100% { transform:rotate(8deg); }
 }
+#global-loader-overlay { position:fixed; inset:0; z-index:400; display:none; align-items:center; justify-content:center; pointer-events:none; background:rgba(10,8,7,0.4); backdrop-filter:blur(3px); }
 .gov-tile-count { font-size:11px;font-weight:900;color:#e08a3c; }
 .gov-tile.active .gov-tile-count { color:#161210; }
 .gym-row { cursor:pointer; }
@@ -478,20 +479,6 @@ a:hover { color:#f0a75a; }
         </div>
         <button id="payment-confirm-btn" onclick="confirmPayment()" disabled style="width:100%;margin-top:10px;background:#e08a3c;color:#161210;border:none;padding:15px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:16px;cursor:pointer;opacity:0.5;">إرسال الطلب</button>
       </div>
-      <div id="payment-loading" style="display:none;" class="curl-loader-wrap">
-        <div class="curl-loader">
-          <div class="curl-shoulder"></div>
-          <div class="curl-upper-arm"></div>
-          <div class="curl-forearm">
-            <div class="curl-dumbbell">
-              <span class="curl-plate curl-plate-l"></span>
-              <span class="curl-bar"></span>
-              <span class="curl-plate curl-plate-r"></span>
-            </div>
-          </div>
-        </div>
-        <div class="curl-loader-text">جارٍ إرسال طلبك...</div>
-      </div>
       <div id="payment-success" style="display:none;text-align:center;color:#e08a3c;font-weight:800;font-size:16px;padding:12px 0;">✅ تم استلام طلبك! سيتواصل معك فريقنا قريباً لإتمام عملية الدفع وتفعيل رصيد نقاطك.</div>
     </div>
   </div>
@@ -518,21 +505,25 @@ a:hover { color:#f0a75a; }
         </div>
         <button type="submit" style="width:100%;background:#e08a3c;color:#161210;border:none;padding:15px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:16px;cursor:pointer;">إنشاء الحساب</button>
       </form>
-      <div id="signup-loading" style="display:none;" class="curl-loader-wrap">
-        <div class="curl-loader">
-          <div class="curl-shoulder"></div>
-          <div class="curl-upper-arm"></div>
-          <div class="curl-forearm">
-            <div class="curl-dumbbell">
-              <span class="curl-plate curl-plate-l"></span>
-              <span class="curl-bar"></span>
-              <span class="curl-plate curl-plate-r"></span>
-            </div>
+      <div id="signup-success" style="display:none;text-align:center;color:#e08a3c;font-weight:800;font-size:16px;padding:12px 0;">✅ تم إنشاء حسابك بنجاح! مرحباً بك في عائلة ذا بيست.</div>
+    </div>
+  </div>
+
+  <!-- GLOBAL LOADER -->
+  <div id="global-loader-overlay">
+    <div class="curl-loader-wrap">
+      <div class="curl-loader">
+        <div class="curl-shoulder"></div>
+        <div class="curl-upper-arm"></div>
+        <div class="curl-forearm">
+          <div class="curl-dumbbell">
+            <span class="curl-plate curl-plate-l"></span>
+            <span class="curl-bar"></span>
+            <span class="curl-plate curl-plate-r"></span>
           </div>
         </div>
-        <div class="curl-loader-text">جارٍ إنشاء حسابك...</div>
       </div>
-      <div id="signup-success" style="display:none;text-align:center;color:#e08a3c;font-weight:800;font-size:16px;padding:12px 0;">✅ تم إنشاء حسابك بنجاح! مرحباً بك في عائلة ذا بيست.</div>
+      <div class="curl-loader-text">جارٍ التحميل...</div>
     </div>
   </div>
 
@@ -771,7 +762,6 @@ function openPaymentModal(name, price) {
   btn.disabled = true;
   btn.style.opacity = '0.5';
   document.getElementById('payment-options-wrap').style.display = '';
-  document.getElementById('payment-loading').style.display = 'none';
   document.getElementById('payment-success').style.display = 'none';
   openModal('payment-modal');
 }
@@ -807,19 +797,14 @@ function confirmPayment() {
     timestamp: new Date().toISOString()
   });
   document.getElementById('payment-options-wrap').style.display = 'none';
-  document.getElementById('payment-loading').style.display = 'flex';
-  setTimeout(function () {
-    document.getElementById('payment-loading').style.display = 'none';
-    document.getElementById('payment-success').style.display = 'block';
-    setTimeout(function () { closeModal('payment-modal'); }, 2200);
-  }, 1400);
+  document.getElementById('payment-success').style.display = 'block';
+  setTimeout(function () { closeModal('payment-modal'); }, 2200);
 }
 
 function openSignupModal() {
   var form = document.getElementById('signup-form');
   form.reset();
   form.style.display = '';
-  document.getElementById('signup-loading').style.display = 'none';
   document.getElementById('signup-success').style.display = 'none';
   openModal('signup-modal');
 }
@@ -842,14 +827,21 @@ function submitSignup(e) {
     timestamp: new Date().toISOString()
   });
   document.getElementById('signup-form').style.display = 'none';
-  document.getElementById('signup-loading').style.display = 'flex';
-  setTimeout(function () {
-    document.getElementById('signup-loading').style.display = 'none';
-    document.getElementById('signup-success').style.display = 'block';
-    setTimeout(function () { closeModal('signup-modal'); }, 2200);
-  }, 1400);
+  document.getElementById('signup-success').style.display = 'block';
+  setTimeout(function () { closeModal('signup-modal'); }, 2200);
   return false;
 }
+
+var globalLoaderTimer = null;
+function showGlobalLoader() {
+  var el = document.getElementById('global-loader-overlay');
+  el.style.display = 'flex';
+  clearTimeout(globalLoaderTimer);
+  globalLoaderTimer = setTimeout(function () { el.style.display = 'none'; }, 2000);
+}
+document.addEventListener('click', function (e) {
+  if (e.target.closest('button')) showGlobalLoader();
+});
 </script>
 </body>
 </html>
