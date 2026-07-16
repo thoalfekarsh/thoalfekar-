@@ -22,6 +22,8 @@ a:hover { color:#f0a75a; }
 .gov-tile:hover { border-color:#e08a3c; }
 .gov-tile.active { background:#e08a3c;color:#161210;border-color:#e08a3c; }
 .gov-tile.empty { opacity:0.4; }
+.gov-hotspot { position:absolute; background:rgba(224,138,60,0); border:2px solid rgba(224,138,60,0); border-radius:8px; cursor:pointer; padding:0; transition:transform .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease; transform:scale(1); z-index:1; }
+.gov-hotspot:hover, .gov-hotspot:focus-visible { background:rgba(224,138,60,0.22); border-color:rgba(224,138,60,0.85); box-shadow:0 0 24px rgba(224,138,60,0.45); transform:scale(1.12); z-index:50; outline:none; }
 .gov-tile-count { font-size:11px;font-weight:900;color:#e08a3c; }
 .gov-tile.active .gov-tile-count { color:#161210; }
 .gym-row { cursor:pointer; }
@@ -183,28 +185,26 @@ a:hover { color:#f0a75a; }
   <!-- IRAQ MAP -->
   <div id="iraq-map" style="padding:100px 64px;background:#1a130d;">
     <div style="max-width:1100px;margin:0 auto;">
-      <div style="max-width:560px;margin:0 auto 32px;">
-        <img src="iraq-map.jpg" usemap="#gov-map-areas" alt="خارطة العراق الإدارية - محافظات وأقاليم، اضغط على أي محافظة لعرض صالاتها" loading="lazy" style="width:100%;display:block;border-radius:20px;cursor:pointer;">
-        <map name="gov-map-areas">
-          <area shape="rect" coords="500,478,568,525" onclick="showGov('بغداد');return false;" href="#" alt="بغداد">
-          <area shape="rect" coords="500,545,578,608" onclick="showGov('بابل');return false;" href="#" alt="بابل">
-          <area shape="rect" coords="420,545,507,655" onclick="showGov('كربلاء');return false;" href="#" alt="كربلاء">
-          <area shape="rect" coords="515,600,648,698" onclick="showGov('القادسية');return false;" href="#" alt="القادسية">
-          <area shape="rect" coords="568,518,722,610" onclick="showGov('واسط');return false;" href="#" alt="واسط">
-          <area shape="rect" coords="545,435,662,485" onclick="showGov('ديالى');return false;" href="#" alt="ديالى">
-          <area shape="rect" coords="700,600,815,678" onclick="showGov('ميسان');return false;" href="#" alt="ميسان">
-          <area shape="rect" coords="645,675,748,748" onclick="showGov('ذي قار');return false;" href="#" alt="ذي قار">
-          <area shape="rect" coords="430,660,558,748" onclick="showGov('النجف');return false;" href="#" alt="النجف">
-          <area shape="rect" coords="535,748,718,812" onclick="showGov('المثنى');return false;" href="#" alt="المثنى">
-          <area shape="rect" coords="730,715,832,798" onclick="showGov('البصرة');return false;" href="#" alt="البصرة">
-          <area shape="rect" coords="460,270,565,362" onclick="showGov('كركوك');return false;" href="#" alt="كركوك">
-          <area shape="rect" coords="560,225,708,358" onclick="showGov('السليمانية');return false;" href="#" alt="السليمانية">
-          <area shape="rect" coords="500,140,628,265" onclick="showGov('أربيل');return false;" href="#" alt="أربيل">
-          <area shape="rect" coords="390,125,522,218" onclick="showGov('دهوك');return false;" href="#" alt="دهوك">
-          <area shape="rect" coords="390,355,598,440" onclick="showGov('صلاح الدين');return false;" href="#" alt="صلاح الدين">
-          <area shape="rect" coords="110,395,442,652" onclick="showGov('الأنبار');return false;" href="#" alt="الأنبار">
-          <area shape="rect" coords="275,170,432,372" onclick="showGov('نينوى');return false;" href="#" alt="نينوى">
-        </map>
+      <div style="position:relative;max-width:560px;margin:0 auto 32px;">
+        <img src="iraq-map.jpg" alt="خارطة العراق الإدارية - محافظات وأقاليم، اضغط على أي محافظة لعرض صالاتها" loading="lazy" style="width:100%;display:block;border-radius:20px;">
+        <button class="gov-hotspot" style="left:50.4%;top:44.97%;width:6.85%;height:4.42%;z-index:18;" onclick="showGov('بغداد')" aria-label="بغداد"></button>
+        <button class="gov-hotspot" style="left:50.4%;top:51.27%;width:7.86%;height:5.93%;z-index:17;" onclick="showGov('بابل')" aria-label="بابل"></button>
+        <button class="gov-hotspot" style="left:54.94%;top:40.92%;width:11.79%;height:4.7%;z-index:16;" onclick="showGov('ديالى')" aria-label="ديالى"></button>
+        <button class="gov-hotspot" style="left:65.02%;top:63.5%;width:10.38%;height:6.87%;z-index:15;" onclick="showGov('ذي قار')" aria-label="ذي قار"></button>
+        <button class="gov-hotspot" style="left:73.59%;top:67.26%;width:10.28%;height:7.81%;z-index:14;" onclick="showGov('البصرة')" aria-label="البصرة"></button>
+        <button class="gov-hotspot" style="left:70.56%;top:56.44%;width:11.59%;height:7.34%;z-index:13;" onclick="showGov('ميسان')" aria-label="ميسان"></button>
+        <button class="gov-hotspot" style="left:42.34%;top:51.27%;width:8.77%;height:10.35%;z-index:12;" onclick="showGov('كربلاء')" aria-label="كربلاء"></button>
+        <button class="gov-hotspot" style="left:46.37%;top:25.4%;width:10.58%;height:8.65%;z-index:11;" onclick="showGov('كركوك')" aria-label="كركوك"></button>
+        <button class="gov-hotspot" style="left:43.35%;top:62.09%;width:12.9%;height:8.28%;z-index:10;" onclick="showGov('النجف')" aria-label="النجف"></button>
+        <button class="gov-hotspot" style="left:53.93%;top:70.37%;width:18.45%;height:6.02%;z-index:9;" onclick="showGov('المثنى')" aria-label="المثنى"></button>
+        <button class="gov-hotspot" style="left:39.31%;top:11.76%;width:13.31%;height:8.75%;z-index:8;" onclick="showGov('دهوك')" aria-label="دهوك"></button>
+        <button class="gov-hotspot" style="left:51.92%;top:56.44%;width:13.41%;height:9.22%;z-index:7;" onclick="showGov('القادسية')" aria-label="القادسية"></button>
+        <button class="gov-hotspot" style="left:57.26%;top:48.73%;width:15.52%;height:8.65%;z-index:6;" onclick="showGov('واسط')" aria-label="واسط"></button>
+        <button class="gov-hotspot" style="left:50.4%;top:13.17%;width:12.9%;height:11.76%;z-index:5;" onclick="showGov('أربيل')" aria-label="أربيل"></button>
+        <button class="gov-hotspot" style="left:39.31%;top:33.4%;width:20.97%;height:8%;z-index:4;" onclick="showGov('صلاح الدين')" aria-label="صلاح الدين"></button>
+        <button class="gov-hotspot" style="left:56.45%;top:21.17%;width:14.92%;height:12.51%;z-index:3;" onclick="showGov('السليمانية')" aria-label="السليمانية"></button>
+        <button class="gov-hotspot" style="left:27.72%;top:15.99%;width:15.83%;height:19%;z-index:2;" onclick="showGov('نينوى')" aria-label="نينوى"></button>
+        <button class="gov-hotspot" style="left:11.09%;top:37.16%;width:33.47%;height:24.18%;z-index:1;" onclick="showGov('الأنبار')" aria-label="الأنبار"></button>
       </div>
       <div id="iraq-map-grid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px;margin:0 auto 40px;">
         <button class="gov-tile" style="padding:10px 18px;" data-gov="دهوك" onclick="showGov('دهوك')"><span>دهوك</span><span class="gov-tile-count"></span></button>
