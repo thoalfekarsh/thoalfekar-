@@ -382,7 +382,7 @@ a:hover { color:#f0a75a; }
         <div id="payment-plan-price" style="color:#e08a3c;font-weight:700;font-size:15px;"></div>
       </div>
       <div id="payment-options-wrap">
-        <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:#cbbcae;">اختر طريقة الدفع</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:#cbbcae;">اختر طريقة الدفع المفضلة</div>
         <div class="pay-option" data-method="qi" onclick="selectPayment('qi')">
           <span style="font-size:22px;">💳</span>
           <div><div style="font-weight:800;font-size:15px;">كي كارد (Qi Card)</div><div style="color:#a3937f;font-size:13px;">الدفع عبر بطاقة كي كارد العراقية</div></div>
@@ -395,9 +395,24 @@ a:hover { color:#f0a75a; }
           <span style="font-size:22px;">💳</span>
           <div><div style="font-weight:800;font-size:15px;">فيزا (Visa)</div><div style="color:#a3937f;font-size:13px;">الدفع عبر بطاقة فيزا</div></div>
         </div>
-        <button id="payment-confirm-btn" onclick="confirmPayment()" disabled style="width:100%;margin-top:10px;background:#e08a3c;color:#161210;border:none;padding:15px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:16px;cursor:pointer;opacity:0.5;">تأكيد الدفع</button>
+        <div style="background:rgba(224,138,60,0.1);border:1px solid rgba(224,138,60,0.3);border-radius:10px;padding:12px 14px;margin:18px 0;font-size:13px;color:#cbbcae;line-height:1.7;">
+          ⚠️ الدفع الإلكتروني المباشر غير مفعّل بعد. اترك بياناتك وسيتواصل معك فريقنا لإتمام عملية الدفع يدوياً. <strong>لا تُدخل رقم بطاقتك هنا.</strong>
+        </div>
+        <div class="form-field">
+          <label style="font-size:14px;font-weight:700;color:#cbbcae;">الاسم الكامل</label>
+          <input type="text" id="payment-lead-name" required placeholder="مثال: أحمد علي">
+        </div>
+        <div class="form-field">
+          <label style="font-size:14px;font-weight:700;color:#cbbcae;">رقم الهاتف</label>
+          <input type="tel" id="payment-lead-phone" required placeholder="07xx xxx xxxx" minlength="12">
+        </div>
+        <div class="form-field">
+          <label style="font-size:14px;font-weight:700;color:#cbbcae;">البريد الإلكتروني (اختياري)</label>
+          <input type="email" id="payment-lead-email" placeholder="example@email.com">
+        </div>
+        <button id="payment-confirm-btn" onclick="confirmPayment()" disabled style="width:100%;margin-top:10px;background:#e08a3c;color:#161210;border:none;padding:15px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:16px;cursor:pointer;opacity:0.5;">إرسال الطلب</button>
       </div>
-      <div id="payment-success" style="display:none;text-align:center;color:#e08a3c;font-weight:800;font-size:16px;padding:12px 0;">✅ تم الاشتراك بنجاح! رصيد نقاطك أصبح فعّالاً.</div>
+      <div id="payment-success" style="display:none;text-align:center;color:#e08a3c;font-weight:800;font-size:16px;padding:12px 0;">✅ تم استلام طلبك! سيتواصل معك فريقنا قريباً لإتمام عملية الدفع وتفعيل رصيد نقاطك.</div>
     </div>
   </div>
 
@@ -411,15 +426,15 @@ a:hover { color:#f0a75a; }
       <form id="signup-form" onsubmit="return submitSignup(event)">
         <div class="form-field">
           <label style="font-size:14px;font-weight:700;color:#cbbcae;">الاسم الكامل</label>
-          <input type="text" required placeholder="مثال: أحمد علي">
+          <input type="text" id="signup-name" required placeholder="مثال: أحمد علي">
         </div>
         <div class="form-field">
           <label style="font-size:14px;font-weight:700;color:#cbbcae;">البريد الإلكتروني</label>
-          <input type="email" required placeholder="example@email.com">
+          <input type="email" id="signup-email" required placeholder="example@email.com">
         </div>
         <div class="form-field">
           <label style="font-size:14px;font-weight:700;color:#cbbcae;">رقم الهاتف</label>
-          <input type="tel" required placeholder="07xx xxx xxxx">
+          <input type="tel" id="signup-phone" required placeholder="07xx xxx xxxx" pattern="\d{12,}" title="رقم الهاتف يجب أن يتكون من 12 رقماً على الأقل" minlength="12">
         </div>
         <button type="submit" style="width:100%;background:#e08a3c;color:#161210;border:none;padding:15px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:16px;cursor:pointer;">إنشاء الحساب</button>
       </form>
@@ -619,13 +634,45 @@ document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
   });
 });
 
+/*
+ * Google Sheets logging
+ * ----------------------
+ * 1. Create a Google Sheet.
+ * 2. In it, open Extensions > Apps Script, delete the placeholder code and
+ *    paste the contents of google-apps-script.gs (in this project folder).
+ * 3. Deploy > New deployment > type "Web app" > Execute as: Me,
+ *    Who has access: Anyone. Copy the resulting web app URL.
+ * 4. Paste that URL below, replacing the empty string.
+ */
+var SHEET_WEBHOOK_URL = '';
+
+function sendToSheet(payload) {
+  if (!SHEET_WEBHOOK_URL) {
+    console.warn('SHEET_WEBHOOK_URL is not set yet — lead was NOT saved to Google Sheets:', payload);
+    return;
+  }
+  fetch(SHEET_WEBHOOK_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).catch(function (err) { console.error('Failed to save to Google Sheet:', err); });
+}
+
 var selectedPayment = null;
+var currentPlanName = '';
+var currentPlanPrice = '';
 
 function openPaymentModal(name, price) {
   selectedPayment = null;
+  currentPlanName = name;
+  currentPlanPrice = price;
   document.getElementById('payment-plan-name').textContent = name;
   document.getElementById('payment-plan-price').textContent = price;
   document.querySelectorAll('.pay-option').forEach(function (el) { el.classList.remove('selected'); });
+  document.getElementById('payment-lead-name').value = '';
+  document.getElementById('payment-lead-phone').value = '';
+  document.getElementById('payment-lead-email').value = '';
   var btn = document.getElementById('payment-confirm-btn');
   btn.disabled = true;
   btn.style.opacity = '0.5';
@@ -646,6 +693,24 @@ function selectPayment(method) {
 
 function confirmPayment() {
   if (!selectedPayment) return;
+  var name = document.getElementById('payment-lead-name').value.trim();
+  var phone = document.getElementById('payment-lead-phone').value.trim();
+  var email = document.getElementById('payment-lead-email').value.trim();
+  var phoneDigits = phone.replace(/\D/g, '');
+  if (!name || phoneDigits.length < 12) {
+    alert('الرجاء إدخال الاسم ورقم هاتف لا يقل عن 12 رقماً');
+    return;
+  }
+  sendToSheet({
+    type: 'membership-lead',
+    plan: currentPlanName,
+    price: currentPlanPrice,
+    preferredPaymentMethod: selectedPayment,
+    name: name,
+    phone: phone,
+    email: email,
+    timestamp: new Date().toISOString()
+  });
   document.getElementById('payment-options-wrap').style.display = 'none';
   document.getElementById('payment-success').style.display = 'block';
   setTimeout(function () { closeModal('payment-modal'); }, 2200);
@@ -661,6 +726,21 @@ function openSignupModal() {
 
 function submitSignup(e) {
   e.preventDefault();
+  var name = document.getElementById('signup-name').value.trim();
+  var email = document.getElementById('signup-email').value.trim();
+  var phone = document.getElementById('signup-phone').value.trim();
+  var phoneDigits = phone.replace(/\D/g, '');
+  if (phoneDigits.length < 12) {
+    alert('رقم الهاتف يجب أن يتكون من 12 رقماً على الأقل');
+    return false;
+  }
+  sendToSheet({
+    type: 'signup',
+    name: name,
+    email: email,
+    phone: phone,
+    timestamp: new Date().toISOString()
+  });
   document.getElementById('signup-form').style.display = 'none';
   document.getElementById('signup-success').style.display = 'block';
   setTimeout(function () { closeModal('signup-modal'); }, 2200);
