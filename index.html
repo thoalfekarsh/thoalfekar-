@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ذا بيست | The Beast Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+body { margin:0; background:#161210; }
+a { color:#e08a3c; }
+a:hover { color:#f0a75a; }
+::selection { background:#e08a3c; color:#161210; }
+.img-slot { display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2a2320,#3a3330);color:#a3937f;font-size:14px;font-weight:600;text-align:center;padding:12px;box-sizing:border-box; }
+.gov-btn { background:transparent;color:#cbbcae;border:1px solid rgba(245,237,228,0.15);padding:9px 20px;border-radius:100px;font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s ease; }
+.gov-btn:hover { border-color:#e08a3c;color:#f5ede4; }
+.gov-btn.active { background:#e08a3c;color:#161210;border-color:#e08a3c; }
+.gym-card { background:#161210;border:1px solid rgba(245,237,228,0.08);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:10px;animation:fadeUp .4s ease both;overflow:hidden; }
+.gym-card img { width:calc(100% + 48px);height:160px;object-fit:cover;margin:-24px -24px 16px -24px;display:block; }
+.gov-tile { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#2a2320;border:1px solid rgba(245,237,228,0.15);border-radius:10px;color:#f5ede4;font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;cursor:pointer;padding:4px;text-align:center;line-height:1.3;transition:all .15s ease; }
+.gov-tile:hover { border-color:#e08a3c; }
+.gov-tile.active { background:#e08a3c;color:#161210;border-color:#e08a3c; }
+.gov-tile.empty { opacity:0.4; }
+.gov-tile-count { font-size:11px;font-weight:900;color:#e08a3c; }
+.gov-tile.active .gov-tile-count { color:#161210; }
+.gym-row { cursor:pointer; }
+.gym-row:hover { border-color:rgba(224,138,60,0.4) !important; }
+.gym-row-price { max-height:0; overflow:hidden; opacity:0; transition:all .25s ease; width:100%; }
+.gym-row.open .gym-row-price { max-height:60px; opacity:1; margin-top:8px; }
+.hero-slide { position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease; }
+.hero-slide.active { opacity:1; }
+.plan-card { position:relative; transition:transform .3s ease, box-shadow .3s ease; z-index:1; cursor:default; }
+.plan-card:hover { transform:scale(1.08) translateY(-10px); z-index:30; box-shadow:0 30px 65px rgba(224,138,60,0.35); }
+.plan-card.featured { transform:scale(1.04); }
+.plan-card.featured:hover { transform:scale(1.13) translateY(-10px); }
+.modal-overlay { position:fixed;inset:0;background:rgba(10,8,7,0.78);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;box-sizing:border-box; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:#1d1815;border:1px solid rgba(245,237,228,0.12);border-radius:20px;padding:36px;max-width:440px;width:100%;max-height:90vh;overflow-y:auto;animation:fadeUp .3s ease both; }
+.modal-close { background:transparent;border:1px solid rgba(245,237,228,0.2);color:#a3937f;font-size:14px;font-weight:700;cursor:pointer;border-radius:8px;padding:8px 12px;font-family:'Cairo',sans-serif; }
+.pay-option { display:flex;align-items:center;gap:14px;background:#161210;border:1.5px solid rgba(245,237,228,0.12);border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .15s ease;margin-bottom:12px; }
+.pay-option:hover { border-color:rgba(224,138,60,0.5); }
+.pay-option.selected { border-color:#e08a3c;background:rgba(224,138,60,0.1); }
+.form-field { display:flex;flex-direction:column;gap:8px;margin-bottom:18px; }
+.form-field input { background:#161210;border:1px solid rgba(245,237,228,0.15);border-radius:10px;padding:13px 16px;color:#f5ede4;font-family:'Cairo',sans-serif;font-size:15px;outline:none;transition:border-color .15s ease;box-sizing:border-box;width:100%; }
+.form-field input:focus { border-color:#e08a3c; }
+</style>
+</head>
+<body>
+
+<div dir="rtl" style="font-family:'Cairo',sans-serif;background:#161210;color:#f5ede4;width:100%;min-height:100vh;overflow-x:hidden;">
+
+  <!-- NAV -->
+  <div style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:20px 64px;background:rgba(22,18,16,0.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(245,237,228,0.08);">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#e08a3c,#b5541a);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:#161210;">B</div>
+      <span style="font-weight:900;font-size:22px;letter-spacing:0.5px;">THE BEST&nbsp;</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:36px;font-weight:600;font-size:16px;color:#cbbcae;">
+      <a href="#branches" onclick="event.preventDefault();document.getElementById('branches').scrollIntoView({behavior:'smooth'})" style="color:#cbbcae;text-decoration:none;cursor:pointer;">الفروع</a>
+      <a href="#points-system" onclick="event.preventDefault();document.getElementById('points-system').scrollIntoView({behavior:'smooth'})" style="color:#cbbcae;text-decoration:none;cursor:pointer;">نظام النقاط</a>
+      <a href="#membership" onclick="event.preventDefault();document.getElementById('membership').scrollIntoView({behavior:'smooth'})" style="color:#cbbcae;text-decoration:none;cursor:pointer;">العضويات</a>
+      <a href="#trainers" onclick="event.preventDefault();document.getElementById('trainers').scrollIntoView({behavior:'smooth'})" style="color:#cbbcae;text-decoration:none;cursor:pointer;">المدربون</a>
+      <a href="#gym-directory" style="color:#cbbcae;text-decoration:none;">دليل الصالات</a>
+      <a href="#iraq-map" style="color:#cbbcae;text-decoration:none;">خريطة الصالات</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div id="points-balance" style="display:flex;align-items:center;gap:8px;background:rgba(224,138,60,0.12);border:1px solid rgba(224,138,60,0.3);padding:9px 18px;border-radius:100px;font-weight:800;font-size:14px;color:#e08a3c;white-space:nowrap;">
+        <span>🪙</span><span>رصيدك: <span id="points-balance-value">0</span> نقطة</span>
+      </div>
+      <button onclick="openSignupModal()" style="background:#e08a3c;color:#161210;border:none;padding:12px 26px;border-radius:8px;font-family:'Cairo',sans-serif;font-weight:800;font-size:15px;cursor:pointer;">اشترك الآن</button>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div style="position:relative;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:90px 64px 100px;max-width:1440px;margin:0 auto;">
+    <div style="animation:fadeUp 0.7s ease both;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(224,138,60,0.12);border:1px solid rgba(224,138,60,0.3);color:#e08a3c;padding:8px 18px;border-radius:100px;font-weight:700;font-size:14px;margin-bottom:28px;">
+        <span>مجموعة صالات رياضية في جميع أنحاء العراق</span>
+      </div>
+      <h1 style="font-size:64px;line-height:1.15;font-weight:900;margin:0 0 24px;">
+        عائلة واحدة،<br>
+        <span style="color:#e08a3c;">صالة في كل حي</span>
+      </h1>
+      <p style="font-size:19px;line-height:1.8;color:#cbbcae;max-width:520px;margin:0 0 40px;">
+        انضم إلى مجتمع ذا بيست وتدرّب في أي صالة من صالاتنا المنتشرة في بغداد وباقي المحافظات. رصيدك من النقاط يرافقك أينما ذهبت — عائلة واحدة تحت سقف واحد، مهما كان بعيداً.
+      </p>
+      <div style="display:flex;gap:16px;">
+        <button onclick="document.getElementById('membership').scrollIntoView({behavior:'smooth'})" style="background:#e08a3c;color:#161210;border:none;padding:16px 34px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:17px;cursor:pointer;">ابدأ رحلتك</button>
+        <button onclick="document.getElementById('branches').scrollIntoView({behavior:'smooth'})" style="background:transparent;color:#f5ede4;border:1px solid rgba(245,237,228,0.25);padding:16px 34px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:700;font-size:17px;cursor:pointer;">شاهد الفروع</button>
+      </div>
+      <div style="display:flex;gap:44px;margin-top:56px;">
+        <div><div style="font-size:32px;font-weight:900;color:#e08a3c;">60</div><div style="font-size:14px;color:#a3937f;margin-top:4px;">صالة في العراق</div></div>
+        <div><div style="font-size:32px;font-weight:900;color:#e08a3c;">6200+</div><div style="font-size:14px;color:#a3937f;margin-top:4px;">عضو نشط</div></div>
+        <div><div style="font-size:32px;font-weight:900;color:#e08a3c;">1</div><div style="font-size:14px;color:#a3937f;margin-top:4px;">رصيد نقاط لكل الفروع</div></div>
+      </div>
+    </div>
+    <div style="position:relative;height:560px;border-radius:28px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,0.5);">
+      <div id="hero-carousel" style="position:relative;width:100%;height:100%;">
+        <img class="hero-slide active" src="https://images.pexels.com/photos/5327549/pexels-photo-5327549.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop" alt="بطل من صالة ذا بيست">
+        <img class="hero-slide" src="https://images.pexels.com/photos/29667299/pexels-photo-29667299.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop" alt="بطل من صالة ذا بيست">
+        <img class="hero-slide" src="https://images.pexels.com/photos/18502146/pexels-photo-18502146.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop" alt="بطل من صالة ذا بيست">
+        <img class="hero-slide" src="https://images.pexels.com/photos/9361431/pexels-photo-9361431.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop" alt="بطل من صالة ذا بيست">
+      </div>
+      <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(22,18,16,0.55) 0%,transparent 45%);pointer-events:none;"></div>
+    </div>
+  </div>
+
+  <!-- POINTS SYSTEM -->
+  <div id="points-system" style="padding:100px 64px;background:#1d1815;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:64px;">
+        <div style="color:#e08a3c;font-weight:800;font-size:15px;letter-spacing:1px;margin-bottom:14px;">نظام النقاط</div>
+        <h2 style="font-size:42px;font-weight:900;margin:0 0 18px;">رصيد واحد، حرية كاملة</h2>
+        <p style="color:#a3937f;font-size:18px;max-width:600px;margin:0 auto;line-height:1.8;">اشترك مرة واحدة، واحصل على رصيد نقاط تستخدمه للتدرب في أي صالة من صالات ذا بيست في أي محافظة تريدها.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;">
+        <div style="background:#161210;border:1px solid rgba(245,237,228,0.08);border-radius:20px;padding:40px 32px;">
+          <div style="width:56px;height:56px;border-radius:14px;background:rgba(224,138,60,0.12);color:#e08a3c;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;margin-bottom:24px;">١</div>
+          <h3 style="font-size:22px;font-weight:800;margin:0 0 12px;">اشترك واحصل على نقاطك</h3>
+          <p style="color:#a3937f;font-size:16px;line-height:1.8;margin:0;">اختر باقتك الشهرية وسيتم إيداع رصيد النقاط في حسابك فوراً.</p>
+        </div>
+        <div style="background:#161210;border:1px solid rgba(245,237,228,0.08);border-radius:20px;padding:40px 32px;">
+          <div style="width:56px;height:56px;border-radius:14px;background:rgba(224,138,60,0.12);color:#e08a3c;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;margin-bottom:24px;">٢</div>
+          <h3 style="font-size:22px;font-weight:800;margin:0 0 12px;">اختر أي صالة تناسبك</h3>
+          <p style="color:#a3937f;font-size:16px;line-height:1.8;margin:0;">في بيتك، في عملك، أو في محافظة أخرى — كل فروعنا مفتوحة أمامك.</p>
+        </div>
+        <div style="background:#161210;border:1px solid rgba(245,237,228,0.08);border-radius:20px;padding:40px 32px;">
+          <div style="width:56px;height:56px;border-radius:14px;background:rgba(224,138,60,0.12);color:#e08a3c;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;margin-bottom:24px;">٣</div>
+          <h3 style="font-size:22px;font-weight:800;margin:0 0 12px;">ادفع بالنقاط عند الدخول</h3>
+          <p style="color:#a3937f;font-size:16px;line-height:1.8;margin:0;">امسح رمز العضوية عند الدخول ويُخصم من رصيدك — بدون عقود إضافية.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCATIONS -->
+  <div id="branches" style="padding:100px 64px;">
+    <div style="max-width:1300px;margin:0 auto;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px;">
+        <div>
+          <div style="color:#e08a3c;font-weight:800;font-size:15px;letter-spacing:1px;margin-bottom:14px;">فروعنا</div>
+          <h2 style="font-size:42px;font-weight:900;margin:0;">منتشرون في كل العراق</h2>
+        </div>
+        <p style="color:#a3937f;font-size:16px;max-width:380px;line-height:1.8;margin:0;">من الكرادة إلى المنصور، ومن بغداد إلى البصرة وأربيل — صالة ذا بيست قريبة منك دائماً.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px;">
+        <div style="border-radius:18px;overflow:hidden;">
+          <div style="height:180px;"><img src="https://images.pexels.com/photos/32085170/pexels-photo-32085170.jpeg?auto=compress&cs=tinysrgb&w=500&h=360&fit=crop" alt="صورة فرع الكرادة" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div style="padding:18px 4px;"><h4 style="margin:0 0 4px;font-size:18px;font-weight:800;">الكرادة، بغداد</h4><span style="color:#a3937f;font-size:14px;">مفتوح 24 ساعة</span></div>
+        </div>
+        <div style="border-radius:18px;overflow:hidden;">
+          <div style="height:180px;"><img src="https://images.pexels.com/photos/14974435/pexels-photo-14974435.jpeg?auto=compress&cs=tinysrgb&w=500&h=360&fit=crop" alt="صورة فرع المنصور" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div style="padding:18px 4px;"><h4 style="margin:0 0 4px;font-size:18px;font-weight:800;">المنصور، بغداد</h4><span style="color:#a3937f;font-size:14px;">مفتوح 24 ساعة</span></div>
+        </div>
+        <div style="border-radius:18px;overflow:hidden;">
+          <div style="height:180px;"><img src="https://images.pexels.com/photos/30283458/pexels-photo-30283458.jpeg?auto=compress&cs=tinysrgb&w=500&h=360&fit=crop" alt="صورة فرع البصرة" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div style="padding:18px 4px;"><h4 style="margin:0 0 4px;font-size:18px;font-weight:800;">البصرة</h4><span style="color:#a3937f;font-size:14px;">6ص – 12م</span></div>
+        </div>
+        <div style="border-radius:18px;overflow:hidden;">
+          <div style="height:180px;"><img src="https://images.pexels.com/photos/32085385/pexels-photo-32085385.jpeg?auto=compress&cs=tinysrgb&w=500&h=360&fit=crop" alt="صورة فرع أربيل" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div style="padding:18px 4px;"><h4 style="margin:0 0 4px;font-size:18px;font-weight:800;">أربيل</h4><span style="color:#a3937f;font-size:14px;">6ص – 12م</span></div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:36px;">
+        <button onclick="document.getElementById('gym-directory').scrollIntoView({behavior:'smooth'})" style="background:transparent;color:#e08a3c;border:1px solid rgba(224,138,60,0.4);padding:14px 32px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:700;font-size:15px;cursor:pointer;">عرض كل الفروع الـ60</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IRAQ MAP -->
+  <div id="iraq-map" style="padding:100px 64px;background:#1d1815;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:48px;">
+        <div style="color:#e08a3c;font-weight:800;font-size:15px;letter-spacing:1px;margin-bottom:14px;">خريطة تفاعلية</div>
+        <h2 style="font-size:42px;font-weight:900;margin:0 0 18px;">تصفّح الصالات حسب المحافظة</h2>
+        <p style="color:#a3937f;font-size:17px;max-width:600px;margin:0 auto;line-height:1.8;">من دهوك شمالاً إلى البصرة جنوباً، رصيد نقاطك يفتح لك صالة ذا بيست في كل محافظة عراقية. اضغط على أي محافظة على الخريطة لعرض عدد الصالات فيها، مع اسم كل صالة واسم مدربها.</p>
+      </div>
+      <div id="iraq-map-grid" dir="ltr" style='display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:60px;gap:6px;max-width:560px;margin:0 auto 40px;grid-template-areas:". DK ER SU ." "NN NN KK KK ." "AN . SD DY ." "AN . BG DY ." "AN KB BB WS ." "AN NJ QD MS ." ". NJ MT DQ ." ". . MT BS .";'>
+        <button class="gov-tile" style="grid-area:DK;" data-gov="دهوك" onclick="showGov('دهوك')"><span>دهوك</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:ER;" data-gov="أربيل" onclick="showGov('أربيل')"><span>أربيل</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:SU;" data-gov="السليمانية" onclick="showGov('السليمانية')"><span>السليمانية</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:NN;" data-gov="نينوى" onclick="showGov('نينوى')"><span>نينوى</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:KK;" data-gov="كركوك" onclick="showGov('كركوك')"><span>كركوك</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:AN;" data-gov="الأنبار" onclick="showGov('الأنبار')"><span>الأنبار</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:SD;" data-gov="صلاح الدين" onclick="showGov('صلاح الدين')"><span>صلاح الدين</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:DY;" data-gov="ديالى" onclick="showGov('ديالى')"><span>ديالى</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:BG;" data-gov="بغداد" onclick="showGov('بغداد')"><span>بغداد</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:KB;" data-gov="كربلاء" onclick="showGov('كربلاء')"><span>كربلاء</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:BB;" data-gov="بابل" onclick="showGov('بابل')"><span>بابل</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:WS;" data-gov="واسط" onclick="showGov('واسط')"><span>واسط</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:NJ;" data-gov="النجف" onclick="showGov('النجف')"><span>النجف</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:QD;" data-gov="القادسية" onclick="showGov('القادسية')"><span>القادسية</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:MS;" data-gov="ميسان" onclick="showGov('ميسان')"><span>ميسان</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:MT;" data-gov="المثنى" onclick="showGov('المثنى')"><span>المثنى</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:DQ;" data-gov="ذي قار" onclick="showGov('ذي قار')"><span>ذي قار</span><span class="gov-tile-count"></span></button>
+        <button class="gov-tile" style="grid-area:BS;" data-gov="البصرة" onclick="showGov('البصرة')"><span>البصرة</span><span class="gov-tile-count"></span></button>
+      </div>
+      <div id="gov-list-panel" style="display:none;background:#161210;border:1px solid rgba(245,237,228,0.1);border-radius:20px;padding:32px;max-width:820px;margin:0 auto;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;">
+          <h3 id="gov-list-title" style="margin:0;font-size:22px;font-weight:800;color:#e08a3c;"></h3>
+          <button onclick="closeGovPanel()" style="background:transparent;border:1px solid rgba(245,237,228,0.2);color:#a3937f;font-size:16px;font-weight:700;cursor:pointer;line-height:1;border-radius:8px;padding:8px 12px;font-family:'Cairo',sans-serif;">إغلاق ×</button>
+        </div>
+        <div id="gov-list-items" style="display:flex;flex-direction:column;gap:12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GYM DIRECTORY -->
+  <div id="gym-directory" style="padding:100px 64px;">
+    <div style="max-width:1300px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="color:#e08a3c;font-weight:800;font-size:15px;letter-spacing:1px;margin-bottom:14px;">دليل الصالات</div>
+        <h2 style="font-size:42px;font-weight:900;margin:0 0 18px;">أشهر الصالات الرياضية في العراق</h2>
+        <p style="color:#a3937f;font-size:17px;max-width:680px;margin:0 auto;line-height:1.8;">قائمة بأبرز صالات كمال الأجسام واللياقة البدنية في عموم المحافظات العراقية، مع العناوين الدقيقة وأسماء الكادر التدريبي في كل صالة.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:40px 0 48px;">
+        <button class="gov-btn active" data-gov="all" onclick="filterGyms('all')">الكل (60)</button>
+        <button class="gov-btn" data-gov="بغداد" onclick="filterGyms('بغداد')">بغداد (15)</button>
+        <button class="gov-btn" data-gov="أربيل" onclick="filterGyms('أربيل')">أربيل (8)</button>
+        <button class="gov-btn" data-gov="البصرة" onclick="filterGyms('البصرة')">البصرة (7)</button>
+        <button class="gov-btn" data-gov="النجف" onclick="filterGyms('النجف')">النجف (4)</button>
+        <button class="gov-btn" data-gov="كربلاء" onclick="filterGyms('كربلاء')">كربلاء (4)</button>
+        <button class="gov-btn" data-gov="نينوى" onclick="filterGyms('نينوى')">نينوى (4)</button>
+        <button class="gov-btn" data-gov="كركوك" onclick="filterGyms('كركوك')">كركوك (3)</button>
+        <button class="gov-btn" data-gov="دهوك" onclick="filterGyms('دهوك')">دهوك (3)</button>
+        <button class="gov-btn" data-gov="الأنبار" onclick="filterGyms('الأنبار')">الأنبار (2)</button>
+        <button class="gov-btn" data-gov="بابل" onclick="filterGyms('بابل')">بابل (2)</button>
+        <button class="gov-btn" data-gov="ديالى" onclick="filterGyms('ديالى')">ديالى (2)</button>
+        <button class="gov-btn" data-gov="صلاح الدين" onclick="filterGyms('صلاح الدين')">صلاح الدين (2)</button>
+        <button class="gov-btn" data-gov="واسط" onclick="filterGyms('واسط')">واسط (1)</button>
+        <button class="gov-btn" data-gov="ميسان" onclick="filterGyms('ميسان')">ميسان (1)</button>
+        <button class="gov-btn" data-gov="ذي قار" onclick="filterGyms('ذي قار')">ذي قار (1)</button>
+        <button class="gov-btn" data-gov="المثنى" onclick="filterGyms('المثنى')">المثنى (1)</button>
+      </div>
+      <div id="gym-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/15018025/pexels-photo-15018025.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="مجموعة غيث جيم - فرع زيونة (رجال ونساء)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">مجموعة غيث جيم - فرع زيونة (رجال ونساء)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 زيونة، شارع خدمي ملعب الشعب، مقابل مستشفى زيونة الأهلي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن غيث الخفاجي، الكابتن أحمد الشمري</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/32085170/pexels-photo-32085170.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="مجموعة غيث جيم - فرع زيونة (نساء فقط)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">مجموعة غيث جيم - فرع زيونة (نساء فقط)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 زيونة، شارع الربيعي، فرع الأمير مول، مقابل مدرسة الخنساء</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن مروة السامرائي، الكابتن نور الهدى</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/14974435/pexels-photo-14974435.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="مجموعة غيث جيم - فرع الكرادة" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">مجموعة غيث جيم - فرع الكرادة</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الكرادة، شارع 62، بجوار مطعم فرايد تشكن</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن علي جعفر، الكابتن يوسف الموسوي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/5327549/pexels-photo-5327549.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="مجموعة غيث جيم - فرع شارع فلسطين" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">مجموعة غيث جيم - فرع شارع فلسطين</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع فلسطين، بداية جسر ساحة بيروت من جهة أريدو</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن حيدر التميمي، الكابتن مصطفى اللامي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/18502875/pexels-photo-18502875.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="مجموعة غيث جيم - فرع البنوك" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">مجموعة غيث جيم - فرع البنوك</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 البنوك، مقابل مطعم الملكة، بداية شارع الميثاق</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن كمال الحسني، الكابتن سجاد الرافدي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/29639958/pexels-photo-29639958.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="باور جيم (Power Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">باور جيم (Power Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي الجامعة، تقاطع نفق الشرطة</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن رائد الساعدي، الكابتن محمد الجبوري</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/29034028/pexels-photo-29034028.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="ماتريكس جيم (Matrix Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">ماتريكس جيم (Matrix Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي الجامعة، شارع الربيع</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن سيف العبيدي، الكابتن ياسر القيسي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/29667299/pexels-photo-29667299.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="ترو جيم (True Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">ترو جيم (True Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي السلام، بالقرب من مدرسة الآداب الأساسية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن محمود زكي، الكابتن حسن الطائي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/18502146/pexels-photo-18502146.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="فليكس جيم (Flex Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">فليكس جيم (Flex Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الجادرية، قرب جسر الطابقين، مقابل مؤسسة الشهداء</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن أمجد المياحي، الكابتن ضياء العراقي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/13562693/pexels-photo-13562693.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="أوكسجين جيم (Oxygen Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">أوكسجين جيم (Oxygen Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 المنصور، مقابل كباب زرزور</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن علي هاني، نوار النعيمي، زيدون البياتي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/15379768/pexels-photo-15379768.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="بوديلاينز (Bodylines - فندق بابل روتانا)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">بوديلاينز (Bodylines - فندق بابل روتانا)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الجادرية، شارع أبي نؤاس، داخل فندق بابل روتانا</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 نخبة من المدربين الأجانب والمحليين المعتمدين</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/13451734/pexels-photo-13451734.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="تيتانيوم جيم (Titanium Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">تيتانيوم جيم (Titanium Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الغزالية، شارع المشاجير الرئيسي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن زكريا الطائي، الكابتن ليث الخفاجي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/19790236/pexels-photo-19790236.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="آيرون جيم (Iron Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">آيرون جيم (Iron Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الحارثية، شارع الكندي، قرب مول بغداد</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن بلال السعدي، الكابتن بسام حميد</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/31918876/pexels-photo-31918876.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جيم الأبطال (Champions Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جيم الأبطال (Champions Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الكرادة داخل، قرب ساحة التحريات</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن عباس اللامي، الكابتن مرتضى الزبيدي</p></div>
+        <div class="gym-card" data-gov="بغداد"><img src="https://images.pexels.com/photos/14918292/pexels-photo-14918292.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="بيست جيم (Beast Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">بيست جيم (Beast Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بغداد</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الدورة، شارع طعمة، قرب الجمعية السكنية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن وليد الشمري، الكابتن جعفر الكناني</p></div>
+        <div class="gym-card" data-gov="أربيل"><img src="https://images.pexels.com/photos/32085173/pexels-photo-32085173.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="ايفل جيم (Evil Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">ايفل جيم (Evil Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">أربيل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع 100 متري، قرب مستشفى رزكاري</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن بوتان شيرواني، الكابتن كاروان هوليري</p></div>
+        <div class="gym-card" data-gov="أربيل"><img src="https://images.pexels.com/photos/30283458/pexels-photo-30283458.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="ألفا جيم (Alpha Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">ألفا جيم (Alpha Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">أربيل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 منطقة دريم سيتي الفاخرة</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن ألان كوردستاني، الكابتن ديار زاخوي</p></div>
+        <div class="gym-card" data-gov="أربيل"><img src="https://images.pexels.com/photos/32085385/pexels-photo-32085385.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="فيت زون جيم (Fitzone Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">فيت زون جيم (Fitzone Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">أربيل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع الجولان، مقابل بارك سامي عبد الرحمن</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن شيروان محمد، الكابتن هاما هوليري</p></div>
+        <div class="gym-card" data-gov="أربيل"><img src="https://images.pexels.com/photos/9306046/pexels-photo-9306046.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="إيليت جيم (Elite Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">إيليت جيم (Elite Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">أربيل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع الجولان، المجمع الرياضي الحديث</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن رواند دوسكي، الكابتن بيشوا بارزاني</p></div>
+        <div class="gym-card" data-gov="أربيل"><img src="https://images.pexels.com/photos/13451633/pexels-photo-13451633.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="إيتاليان جيم (Italian Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">إيتاليان جيم (Italian Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">أربيل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 المدينة الإيطالية الثانية، البوابة الجنوبية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن هيفار كوجر، الكابتن بروا السوراني</p></div>
+        <div class="gym-card" data-gov="أربيل"><img src="https://images.pexels.com/photos/5327537/pexels-photo-5327537.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="بيك رامي جيم (Big Ramy Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">بيك رامي جيم (Big Ramy Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">أربيل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع 40 متري، مجاور أبراج جولان السكنية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن آرام سوران، الكابتن زانا بختياري</p></div>
+        <div class="gym-card" data-gov="أربيل"><img src="https://images.pexels.com/photos/9361431/pexels-photo-9361431.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جولدن جيم (Golden Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جولدن جيم (Golden Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">أربيل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي بختياري، شارع القنصليات</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن دانا محمد، الكابتن سركوت ريكاني</p></div>
+        <div class="gym-card" data-gov="أربيل"><img src="https://images.pexels.com/photos/31918875/pexels-photo-31918875.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="بيك جيم (Peak Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">بيك جيم (Peak Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">أربيل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 عينكاوا، الشارع الرئيسي، قرب الكنيسة الكلدانية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن هردي شوان، الكابتن آكو جلال</p></div>
+        <div class="gym-card" data-gov="البصرة"><img src="https://images.pexels.com/photos/20594778/pexels-photo-20594778.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="بانثر جيم (Panther Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">بانثر جيم (Panther Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">البصرة</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 العباسية، قرب تقاطع الطويسة التجاري</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن سجاد البصري، الكابتن مرتضى الحلفي</p></div>
+        <div class="gym-card" data-gov="البصرة"><img src="https://images.pexels.com/photos/15018025/pexels-photo-15018025.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="في اي بي جيم (VIP Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">في اي بي جيم (VIP Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">البصرة</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع السعدي، بالقرب من ساحة الطيران</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن منتظر الأسدي، الكابتن باقر الموسوي</p></div>
+        <div class="gym-card" data-gov="البصرة"><img src="https://images.pexels.com/photos/32085170/pexels-photo-32085170.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جولدز جيم (Gold's Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جولدز جيم (Gold's Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">البصرة</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع الطويسة، بالقرب من مقر اللجنة الأولمبية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن عباس اللامي، الكابتن حيدر التميمي</p></div>
+        <div class="gym-card" data-gov="البصرة"><img src="https://images.pexels.com/photos/14974435/pexels-photo-14974435.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="كويك فيتنس جيم (Quick Fitness)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">كويك فيتنس جيم (Quick Fitness)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">البصرة</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الشارع التجاري، بالقرب من ريان سنتر</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن حسين الفضلي، الكابتن علي المياحي</p></div>
+        <div class="gym-card" data-gov="البصرة"><img src="https://images.pexels.com/photos/5327549/pexels-photo-5327549.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="فيتنس الملك (King's Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">فيتنس الملك (King's Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">البصرة</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي الخليج العربي، شارع التربية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن عمار الحلفي، الكابتن جاسم الدراجي</p></div>
+        <div class="gym-card" data-gov="البصرة"><img src="https://images.pexels.com/photos/18502875/pexels-photo-18502875.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="شناشيل جيم (Shanasheel Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">شناشيل جيم (Shanasheel Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">البصرة</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع الجزائر، قرب شناشيل مول التجاري</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن كرار الدراجي، الكابتن ضياء الغانم</p></div>
+        <div class="gym-card" data-gov="البصرة"><img src="https://images.pexels.com/photos/29639958/pexels-photo-29639958.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="مارينا جيم (Marina Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">مارينا جيم (Marina Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">البصرة</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 كورنيش البصرة، مجمع الكورنيش الترفيهي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن صادق اليعقوب، الكابتن جعفر الوائلي</p></div>
+        <div class="gym-card" data-gov="النجف"><img src="https://images.pexels.com/photos/29034028/pexels-photo-29034028.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="يونايتد جيم (United Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">يونايتد جيم (United Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">النجف</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي العدالة، الشارع الخدمي الرئيسي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 اللاعب الدولي حسنين نجاح، الكابتن حسين العكايشي</p></div>
+        <div class="gym-card" data-gov="النجف"><img src="https://images.pexels.com/photos/29667299/pexels-photo-29667299.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جيم مهند (Gym Mohannad)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جيم مهند (Gym Mohannad)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">النجف</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع الروان، قرب مجمع الروان التجاري</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن مهند الغزالي، الكابتن أحمد الياسري</p></div>
+        <div class="gym-card" data-gov="النجف"><img src="https://images.pexels.com/photos/18502146/pexels-photo-18502146.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة البطل الدولي محمد حسون" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة البطل الدولي محمد حسون</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">النجف</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع الكوفة، قرب مجسرات ثورة العشرين</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 البطل الدولي محمد حسون، الكابتن حسن الشاوي</p></div>
+        <div class="gym-card" data-gov="النجف"><img src="https://images.pexels.com/photos/13562693/pexels-photo-13562693.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جيم الغدير (Al-Ghadir Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جيم الغدير (Al-Ghadir Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">النجف</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي الغدير، خلف ساحة الصدرين</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن عادل الكعبي، الكابتن حيدر الجبوري</p></div>
+        <div class="gym-card" data-gov="كربلاء"><img src="https://images.pexels.com/photos/15379768/pexels-photo-15379768.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="لايون جيم (Lion Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">لايون جيم (Lion Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">كربلاء</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع السناتر، خلف مصرف الرافدين</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن أمير الأسدي، الكابتن حيدر الكربلائي</p></div>
+        <div class="gym-card" data-gov="كربلاء"><img src="https://images.pexels.com/photos/13451734/pexels-photo-13451734.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جيم 24 (Gym 24)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جيم 24 (Gym 24)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">كربلاء</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع العباس، فرع بابلون سنتر</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن مصطفى الخفاجي، الكابتن أحمد الكناني</p></div>
+        <div class="gym-card" data-gov="كربلاء"><img src="https://images.pexels.com/photos/19790236/pexels-photo-19790236.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="مركز كربلاء للياقة البدنية" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">مركز كربلاء للياقة البدنية</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">كربلاء</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 مجمع كربلاء السكني، طريق الحر</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن حسين الحسيني، الكابتن كرار الموسوي</p></div>
+        <div class="gym-card" data-gov="كربلاء"><img src="https://images.pexels.com/photos/31918876/pexels-photo-31918876.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جيم العميد (Al-Ameed Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جيم العميد (Al-Ameed Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">كربلاء</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 شارع السناتر، مجاور برج كربلاء التجاري</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن حسن العرداوي، الكابتن علي الشيباني</p></div>
+        <div class="gym-card" data-gov="نينوى"><img src="https://images.pexels.com/photos/14918292/pexels-photo-14918292.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="مركز الجامعة للرشاقة والقوة" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">مركز الجامعة للرشاقة والقوة</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">نينوى</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الموصل، المجمع الطلابي لجامعة الموصل</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن يونس الحداد، الكابتن محمود العبيدي</p></div>
+        <div class="gym-card" data-gov="نينوى"><img src="https://images.pexels.com/photos/32085173/pexels-photo-32085173.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة الحدباء لكمال الأجسام" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة الحدباء لكمال الأجسام</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">نينوى</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الموصل، حي الزهور، خلف جامع الصديق</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن عمر طارق، الكابتن بلال الرمضاني</p></div>
+        <div class="gym-card" data-gov="نينوى"><img src="https://images.pexels.com/photos/30283458/pexels-photo-30283458.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جيم الموصل الدولي" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جيم الموصل الدولي</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">نينوى</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الموصل، حي المثنى، قرب جسر السكر</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن إبراهيم يونس، الكابتن يحيى الطائي</p></div>
+        <div class="gym-card" data-gov="نينوى"><img src="https://images.pexels.com/photos/32085385/pexels-photo-32085385.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة الغزلاني الرياضية" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة الغزلاني الرياضية</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">نينوى</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الموصل، حي الطيران، قرب معسكر الغزلاني القديم</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن بشار السنجري، الكابتن مثنى الحديدي</p></div>
+        <div class="gym-card" data-gov="كركوك"><img src="https://images.pexels.com/photos/9306046/pexels-photo-9306046.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="عالمية الجيم (World Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">عالمية الجيم (World Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">كركوك</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 طريق بغداد، مجاور مجمع كركوك الطبي الاستشاري</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن سيروان كمال، الكابتن آراز زيباري</p></div>
+        <div class="gym-card" data-gov="كركوك"><img src="https://images.pexels.com/photos/13451633/pexels-photo-13451633.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة بابا كركر الرياضية" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة بابا كركر الرياضية</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">كركوك</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي عرفة، الشارع الخدمي السريع للشركة</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن كاروان غفور، الكابتن ريبوار كركوكي</p></div>
+        <div class="gym-card" data-gov="كركوك"><img src="https://images.pexels.com/photos/5327537/pexels-photo-5327537.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="كركوك أولمبيك جيم" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">كركوك أولمبيك جيم</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">كركوك</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 طريق المطار، مجاور فندق كركوك الدولي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن أرسلان طارق، الكابتن هردي شوان</p></div>
+        <div class="gym-card" data-gov="دهوك"><img src="https://images.pexels.com/photos/9361431/pexels-photo-9361431.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="دهوك سيتي جيم" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">دهوك سيتي جيم</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">دهوك</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 حي كروكلي، قرب مستشفى دهوك العام الجديد</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن دلشاد الإتروشي، الكابتن ألان زاخوي</p></div>
+        <div class="gym-card" data-gov="دهوك"><img src="https://images.pexels.com/photos/31918875/pexels-photo-31918875.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="زاخو جيم (Zaxo Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">زاخو جيم (Zaxo Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">دهوك</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 زاخو، منطقة بيدا، الشارع العام الرئيسي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن شيرزاد السندي، الكابتن نيجيرفان هركي</p></div>
+        <div class="gym-card" data-gov="دهوك"><img src="https://images.pexels.com/photos/20594778/pexels-photo-20594778.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="سميل جيم (Semel Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">سميل جيم (Semel Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">دهوك</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 سميل، قرب تقاطع المرور السريع لبلدية سميل</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن هوزان البرواري، الكابتن لزغين الدوسكي</p></div>
+        <div class="gym-card" data-gov="الأنبار"><img src="https://images.pexels.com/photos/15018025/pexels-photo-15018025.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة الأنبار الأولمبية" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة الأنبار الأولمبية</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">الأنبار</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الرمادي، حي الملعب، قرب ملعب الرمادي الأولمبي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن ياسين الفهداوي، الكابتن عمر الدليمي</p></div>
+        <div class="gym-card" data-gov="الأنبار"><img src="https://images.pexels.com/photos/32085170/pexels-photo-32085170.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة الفلوجة لكمال الأجسام" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة الفلوجة لكمال الأجسام</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">الأنبار</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الفلوجة، حي الصناعي، خلف مبنى الشؤون الاجتماعية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن محمود الدليمي، الكابتن طارق العيساوي</p></div>
+        <div class="gym-card" data-gov="بابل"><img src="https://images.pexels.com/photos/14974435/pexels-photo-14974435.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة كليات المستقبل الجامعية" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة كليات المستقبل الجامعية</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بابل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الحلة، طريق حلة-كربلاء السريع، داخل مجمع الكليات</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الدكتور مازن هادي الطائي، الكابتن علاء الجبوري</p></div>
+        <div class="gym-card" data-gov="بابل"><img src="https://images.pexels.com/photos/5327549/pexels-photo-5327549.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جيم الحلة الرياضي" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جيم الحلة الرياضي</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">بابل</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الحلة، شارع 40، مقابل مجمع المعلمين السكني</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن حيدر الخفاجي، الكابتن ليث المعموري</p></div>
+        <div class="gym-card" data-gov="ديالى"><img src="https://images.pexels.com/photos/18502875/pexels-photo-18502875.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة بعقوبة الأولمبية" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة بعقوبة الأولمبية</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">ديالى</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 بعقوبة، حي المفرق، قرب مديرية شباب ورياضة ديالى</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن عمر العزاوي، الكابتن عدي التميمي</p></div>
+        <div class="gym-card" data-gov="ديالى"><img src="https://images.pexels.com/photos/29639958/pexels-photo-29639958.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="جيم ديالى الرياضي" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">جيم ديالى الرياضي</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">ديالى</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 المقدادية، الشارع الرئيسي، مجاور مصرف الرافدين</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن منذر الخزرجي، الكابتن أسامة السعدي</p></div>
+        <div class="gym-card" data-gov="صلاح الدين"><img src="https://images.pexels.com/photos/29034028/pexels-photo-29034028.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="تكريت جيم (Tikrit Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">تكريت جيم (Tikrit Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">صلاح الدين</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 تكريت، شارع الزهور، مقابل مجمع القادسية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن سعد التكريتي، الكابتن وليد الدوري</p></div>
+        <div class="gym-card" data-gov="صلاح الدين"><img src="https://images.pexels.com/photos/29667299/pexels-photo-29667299.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="سامراء جيم (Samarra Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">سامراء جيم (Samarra Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">صلاح الدين</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 سامراء، شارع القاطول، قرب جامع الملوية</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن عباس العباسي، الكابتن عمار البدري</p></div>
+        <div class="gym-card" data-gov="واسط"><img src="https://images.pexels.com/photos/18502146/pexels-photo-18502146.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة الكوت الأولمبية" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة الكوت الأولمبية</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">واسط</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الكوت، حي الربيع، مجاور المجمع الرياضي الحكومي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن مرتضى العوادي، الكابتن حيدر اللامي</p></div>
+        <div class="gym-card" data-gov="ميسان"><img src="https://images.pexels.com/photos/13562693/pexels-photo-13562693.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة العمارة الرياضية" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة العمارة الرياضية</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">ميسان</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 العمارة، حي الحسين، قرب ملعب ميسان الأولمبي</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن جعفر الدبيسي، الكابتن سجاد البهادلي</p></div>
+        <div class="gym-card" data-gov="ذي قار"><img src="https://images.pexels.com/photos/15379768/pexels-photo-15379768.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="الناصرية جيم (Nasiriyah Gym)" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">الناصرية جيم (Nasiriyah Gym)</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">ذي قار</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 الناصرية، حي الشموخ، قرب جسر الحضارات</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن رياض الغزي، الكابتن حازم الناصري</p></div>
+        <div class="gym-card" data-gov="المثنى"><img src="https://images.pexels.com/photos/13451734/pexels-photo-13451734.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="قاعة السماوة لكمال الأجسام" loading="lazy"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><h4 style="margin:0;font-size:17px;font-weight:800;">قاعة السماوة لكمال الأجسام</h4><span style="background:rgba(224,138,60,0.12);color:#e08a3c;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;">المثنى</span></div><p style="margin:0;color:#a3937f;font-size:13.5px;line-height:1.7;">📍 السماوة، شارع الغربي، قرب معمل الإسمنت القديم</p><p style="margin:0;color:#cbbcae;font-size:13.5px;line-height:1.7;">🧑‍🏫 الكابتن علي السماوي، الكابتن حسين الحسني</p></div>
+      </div>
+      <div style="text-align:center;margin-top:40px;">
+        <button id="show-more-gyms-btn" onclick="showMoreGyms()" style="background:transparent;color:#e08a3c;border:1px solid rgba(224,138,60,0.4);padding:14px 36px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:700;font-size:15px;cursor:pointer;">اظهار المزيد</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMBERSHIP -->
+  <div id="membership" style="padding:100px 64px;background:#1d1815;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:60px;">
+        <div style="color:#e08a3c;font-weight:800;font-size:15px;letter-spacing:1px;margin-bottom:14px;">العضويات</div>
+        <h2 style="font-size:42px;font-weight:900;margin:0;">اختر رصيد نقاطك</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:26px;">
+        <div class="plan-card" style="background:#161210;border:1px solid rgba(245,237,228,0.1);border-radius:22px;padding:40px 34px;display:flex;flex-direction:column;gap:20px;">
+          <h3 style="margin:0;font-size:22px;font-weight:800;">الأساسية</h3>
+          <div style="font-size:38px;font-weight:900;">30,000<span style="font-size:16px;color:#a3937f;font-weight:600;"> د.ع / شهرياً</span></div>
+          <div style="color:#e08a3c;font-weight:700;font-size:15px;">8 نقاط شهرياً</div>
+          <p style="color:#a3937f;font-size:15px;line-height:1.8;margin:0;">مثالية للتدرب في صالة واحدة قريبة منك بشكل منتظم.</p>
+          <button onclick="openPaymentModal('الباقة الأساسية', '30,000 د.ع / شهرياً — 8 نقاط شهرياً')" style="margin-top:auto;background:transparent;color:#f5ede4;border:1px solid rgba(245,237,228,0.25);padding:14px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:700;font-size:15px;cursor:pointer;">اختر الباقة</button>
+        </div>
+        <div class="plan-card featured" style="background:linear-gradient(160deg,#e08a3c,#b5541a);border-radius:22px;padding:40px 34px;display:flex;flex-direction:column;gap:20px;color:#161210;box-shadow:0 20px 50px rgba(224,138,60,0.25);">
+          <div style="display:inline-block;background:rgba(22,18,16,0.15);padding:6px 14px;border-radius:100px;font-size:13px;font-weight:800;width:fit-content;">الأكثر اختياراً</div>
+          <h3 style="margin:0;font-size:22px;font-weight:800;">المتنقلة</h3>
+          <div style="font-size:38px;font-weight:900;">55,000<span style="font-size:16px;font-weight:600;"> د.ع / شهرياً</span></div>
+          <div style="font-weight:800;font-size:15px;">18 نقطة شهرياً</div>
+          <p style="font-size:15px;line-height:1.8;margin:0;">تنقّل بين كل الفروع في العراق وتدرب أينما كنت.</p>
+          <button onclick="openPaymentModal('الباقة المتنقلة', '55,000 د.ع / شهرياً — 18 نقطة شهرياً')" style="margin-top:auto;background:#161210;color:#f5ede4;border:none;padding:14px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:15px;cursor:pointer;">اختر الباقة</button>
+        </div>
+        <div class="plan-card" style="background:#161210;border:1px solid rgba(245,237,228,0.1);border-radius:22px;padding:40px 34px;display:flex;flex-direction:column;gap:20px;">
+          <h3 style="margin:0;font-size:22px;font-weight:800;">العائلية</h3>
+          <div style="font-size:38px;font-weight:900;">90,000<span style="font-size:16px;color:#a3937f;font-weight:600;"> د.ع / شهرياً</span></div>
+          <div style="color:#e08a3c;font-weight:700;font-size:15px;">35 نقطة تُشارك بين أفراد العائلة</div>
+          <p style="color:#a3937f;font-size:15px;line-height:1.8;margin:0;">رصيد نقاط مشترك لثلاثة أفراد من العائلة أو الأصدقاء.</p>
+          <button onclick="openPaymentModal('الباقة العائلية', '90,000 د.ع / شهرياً — 35 نقطة مشتركة')" style="margin-top:auto;background:transparent;color:#f5ede4;border:1px solid rgba(245,237,228,0.25);padding:14px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:700;font-size:15px;cursor:pointer;">اختر الباقة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMUNITY -->
+  <div id="trainers" style="padding:100px 64px;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+      <div style="border-radius:24px;overflow:hidden;height:440px;">
+        <img src="https://images.pexels.com/photos/13451633/pexels-photo-13451633.jpeg?auto=compress&cs=tinysrgb&w=800&h=700&fit=crop" alt="صورة مجتمع المتدربين" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <div>
+        <div style="color:#e08a3c;font-weight:800;font-size:15px;letter-spacing:1px;margin-bottom:14px;">مجتمعنا</div>
+        <h2 style="font-size:40px;font-weight:900;margin:0 0 20px;line-height:1.25;">أكثر من مجرد صالة، نحن عائلة رياضية</h2>
+        <p style="color:#a3937f;font-size:18px;line-height:1.9;margin:0 0 32px;">مدربون يعرفون اسمك، ومجتمع يشجعك في كل تمرين. سواء بدأت رحلتك اليوم أو كنت تلاحق بطولتك القادمة، ذا بيست يجمعكم تحت سقف واحد في كل مدينة عراقية.</p>
+        <div style="display:flex;gap:16px;">
+          <div style="width:52px;height:52px;border-radius:50%;background:#2a2320;border:2px solid #161210;"></div>
+          <div style="width:52px;height:52px;border-radius:50%;background:#3a3330;border:2px solid #161210;margin-right:-24px;"></div>
+          <div style="width:52px;height:52px;border-radius:50%;background:#4a4340;border:2px solid #161210;margin-right:-24px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="padding:90px 64px;text-align:center;background:linear-gradient(160deg,#e08a3c,#b5541a);color:#161210;">
+    <h2 style="font-size:44px;font-weight:900;margin:0 0 20px;">جاهز تبدأ رحلتك؟</h2>
+    <p style="font-size:18px;margin:0 0 36px;font-weight:600;">انضم اليوم واحصل على أول رصيد نقاط مجاناً لمدة أسبوع.</p>
+    <button onclick="openSignupModal()" style="background:#161210;color:#f5ede4;border:none;padding:18px 42px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:18px;cursor:pointer;">اشترك الآن</button>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="padding:56px 64px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;border-top:1px solid rgba(245,237,228,0.08);">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#e08a3c,#b5541a);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;color:#161210;">B</div>
+      <span style="font-weight:900;font-size:18px;">ذا بيست</span>
+    </div>
+    <span style="color:#a3937f;font-size:14px;">© 2026 ذا بيست. كل الحقوق محفوظة — بغداد، العراق.</span>
+  </div>
+
+  <!-- PAYMENT MODAL -->
+  <div class="modal-overlay" id="payment-modal">
+    <div class="modal-box">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <h3 style="margin:0;font-size:22px;font-weight:800;color:#e08a3c;">إتمام الاشتراك</h3>
+        <button class="modal-close" onclick="closeModal('payment-modal')">إغلاق ×</button>
+      </div>
+      <div style="background:#161210;border:1px solid rgba(245,237,228,0.08);border-radius:14px;padding:18px 20px;margin-bottom:26px;">
+        <div id="payment-plan-name" style="font-weight:800;font-size:18px;margin-bottom:6px;"></div>
+        <div id="payment-plan-price" style="color:#e08a3c;font-weight:700;font-size:15px;"></div>
+      </div>
+      <div id="payment-options-wrap">
+        <div style="font-weight:700;font-size:15px;margin-bottom:14px;color:#cbbcae;">اختر طريقة الدفع</div>
+        <div class="pay-option" data-method="qi" onclick="selectPayment('qi')">
+          <span style="font-size:22px;">💳</span>
+          <div><div style="font-weight:800;font-size:15px;">كي كارد (Qi Card)</div><div style="color:#a3937f;font-size:13px;">الدفع عبر بطاقة كي كارد العراقية</div></div>
+        </div>
+        <div class="pay-option" data-method="mastercard" onclick="selectPayment('mastercard')">
+          <span style="font-size:22px;">💳</span>
+          <div><div style="font-weight:800;font-size:15px;">ماستر كارد (Mastercard)</div><div style="color:#a3937f;font-size:13px;">الدفع عبر بطاقة ماستر كارد</div></div>
+        </div>
+        <div class="pay-option" data-method="visa" onclick="selectPayment('visa')">
+          <span style="font-size:22px;">💳</span>
+          <div><div style="font-weight:800;font-size:15px;">فيزا (Visa)</div><div style="color:#a3937f;font-size:13px;">الدفع عبر بطاقة فيزا</div></div>
+        </div>
+        <button id="payment-confirm-btn" onclick="confirmPayment()" disabled style="width:100%;margin-top:10px;background:#e08a3c;color:#161210;border:none;padding:15px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:16px;cursor:pointer;opacity:0.5;">تأكيد الدفع</button>
+      </div>
+      <div id="payment-success" style="display:none;text-align:center;color:#e08a3c;font-weight:800;font-size:16px;padding:12px 0;">✅ تم الاشتراك بنجاح! رصيد نقاطك أصبح فعّالاً.</div>
+    </div>
+  </div>
+
+  <!-- SIGNUP MODAL -->
+  <div class="modal-overlay" id="signup-modal">
+    <div class="modal-box">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <h3 style="margin:0;font-size:22px;font-weight:800;color:#e08a3c;">أنشئ حسابك</h3>
+        <button class="modal-close" onclick="closeModal('signup-modal')">إغلاق ×</button>
+      </div>
+      <form id="signup-form" onsubmit="return submitSignup(event)">
+        <div class="form-field">
+          <label style="font-size:14px;font-weight:700;color:#cbbcae;">الاسم الكامل</label>
+          <input type="text" required placeholder="مثال: أحمد علي">
+        </div>
+        <div class="form-field">
+          <label style="font-size:14px;font-weight:700;color:#cbbcae;">البريد الإلكتروني</label>
+          <input type="email" required placeholder="example@email.com">
+        </div>
+        <div class="form-field">
+          <label style="font-size:14px;font-weight:700;color:#cbbcae;">رقم الهاتف</label>
+          <input type="tel" required placeholder="07xx xxx xxxx">
+        </div>
+        <button type="submit" style="width:100%;background:#e08a3c;color:#161210;border:none;padding:15px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:16px;cursor:pointer;">إنشاء الحساب</button>
+      </form>
+      <div id="signup-success" style="display:none;text-align:center;color:#e08a3c;font-weight:800;font-size:16px;padding:12px 0;">✅ تم إنشاء حسابك بنجاح! مرحباً بك في عائلة ذا بيست.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var GYM_PAGE_SIZE = 6;
+var currentGov = 'all';
+var gymShowAll = false;
+
+function filterGyms(gov) {
+  currentGov = gov;
+  gymShowAll = false;
+  applyGymVisibility();
+  document.querySelectorAll('.gov-btn').forEach(function (btn) {
+    btn.classList.toggle('active', btn.dataset.gov === gov);
+  });
+}
+
+function applyGymVisibility() {
+  var matched = [];
+  document.querySelectorAll('.gym-card').forEach(function (card) {
+    if (currentGov === 'all' || card.dataset.gov === currentGov) {
+      matched.push(card);
+    } else {
+      card.style.display = 'none';
+    }
+  });
+  matched.forEach(function (card, i) {
+    card.style.display = (gymShowAll || i < GYM_PAGE_SIZE) ? '' : 'none';
+  });
+  var moreBtn = document.getElementById('show-more-gyms-btn');
+  if (moreBtn) {
+    moreBtn.style.display = (!gymShowAll && matched.length > GYM_PAGE_SIZE) ? '' : 'none';
+  }
+}
+
+function showMoreGyms() {
+  gymShowAll = true;
+  applyGymVisibility();
+}
+
+var GYMS = [
+  {n:"مجموعة غيث جيم - فرع زيونة (رجال ونساء)", g:"بغداد", t:"الكابتن غيث الخفاجي، الكابتن أحمد الشمري", p:15},
+  {n:"مجموعة غيث جيم - فرع زيونة (نساء فقط)", g:"بغداد", t:"الكابتن مروة السامرائي، الكابتن نور الهدى", p:15},
+  {n:"مجموعة غيث جيم - فرع الكرادة", g:"بغداد", t:"الكابتن علي جعفر، الكابتن يوسف الموسوي", p:18},
+  {n:"مجموعة غيث جيم - فرع شارع فلسطين", g:"بغداد", t:"الكابتن حيدر التميمي، الكابتن مصطفى اللامي", p:16},
+  {n:"مجموعة غيث جيم - فرع البنوك", g:"بغداد", t:"الكابتن كمال الحسني، الكابتن سجاد الرافدي", p:14},
+  {n:"باور جيم (Power Gym)", g:"بغداد", t:"الكابتن رائد الساعدي، الكابتن محمد الجبوري", p:20},
+  {n:"ماتريكس جيم (Matrix Gym)", g:"بغداد", t:"الكابتن سيف العبيدي، الكابتن ياسر القيسي", p:22},
+  {n:"ترو جيم (True Gym)", g:"بغداد", t:"الكابتن محمود زكي، الكابتن حسن الطائي", p:17},
+  {n:"فليكس جيم (Flex Gym)", g:"بغداد", t:"الكابتن أمجد المياحي، الكابتن ضياء العراقي", p:19},
+  {n:"أوكسجين جيم (Oxygen Gym)", g:"بغداد", t:"الكابتن علي هاني، نوار النعيمي، زيدون البياتي", p:21},
+  {n:"بوديلاينز (Bodylines - فندق بابل روتانا)", g:"بغداد", t:"نخبة من المدربين الأجانب والمحليين المعتمدين", p:35},
+  {n:"تيتانيوم جيم (Titanium Gym)", g:"بغداد", t:"الكابتن زكريا الطائي، الكابتن ليث الخفاجي", p:23},
+  {n:"آيرون جيم (Iron Gym)", g:"بغداد", t:"الكابتن بلال السعدي، الكابتن بسام حميد", p:20},
+  {n:"جيم الأبطال (Champions Gym)", g:"بغداد", t:"الكابتن عباس اللامي، الكابتن مرتضى الزبيدي", p:18},
+  {n:"بيست جيم (Beast Gym)", g:"بغداد", t:"الكابتن وليد الشمري، الكابتن جعفر الكناني", p:16},
+  {n:"ايفل جيم (Evil Gym)", g:"أربيل", t:"الكابتن بوتان شيرواني، الكابتن كاروان هوليري", p:20},
+  {n:"ألفا جيم (Alpha Gym)", g:"أربيل", t:"الكابتن ألان كوردستاني، الكابتن ديار زاخوي", p:25},
+  {n:"فيت زون جيم (Fitzone Gym)", g:"أربيل", t:"الكابتن شيروان محمد، الكابتن هاما هوليري", p:18},
+  {n:"إيليت جيم (Elite Gym)", g:"أربيل", t:"الكابتن رواند دوسكي، الكابتن بيشوا بارزاني", p:28},
+  {n:"إيتاليان جيم (Italian Gym)", g:"أربيل", t:"الكابتن هيفار كوجر، الكابتن بروا السوراني", p:22},
+  {n:"بيك رامي جيم (Big Ramy Gym)", g:"أربيل", t:"الكابتن آرام سوران، الكابتن زانا بختياري", p:30},
+  {n:"جولدن جيم (Golden Gym)", g:"أربيل", t:"الكابتن دانا محمد، الكابتن سركوت ريكاني", p:24},
+  {n:"بيك جيم (Peak Gym)", g:"أربيل", t:"الكابتن هردي شوان، الكابتن آكو جلال", p:19},
+  {n:"بانثر جيم (Panther Gym)", g:"البصرة", t:"الكابتن سجاد البصري، الكابتن مرتضى الحلفي", p:17},
+  {n:"في اي بي جيم (VIP Gym)", g:"البصرة", t:"الكابتن منتظر الأسدي، الكابتن باقر الموسوي", p:26},
+  {n:"جولدز جيم (Gold's Gym)", g:"البصرة", t:"الكابتن عباس اللامي، الكابتن حيدر التميمي", p:24},
+  {n:"كويك فيتنس جيم (Quick Fitness)", g:"البصرة", t:"الكابتن حسين الفضلي، الكابتن علي المياحي", p:15},
+  {n:"فيتنس الملك (King's Gym)", g:"البصرة", t:"الكابتن عمار الحلفي، الكابتن جاسم الدراجي", p:20},
+  {n:"شناشيل جيم (Shanasheel Gym)", g:"البصرة", t:"الكابتن كرار الدراجي، الكابتن ضياء الغانم", p:16},
+  {n:"مارينا جيم (Marina Gym)", g:"البصرة", t:"الكابتن صادق اليعقوب، الكابتن جعفر الوائلي", p:22},
+  {n:"يونايتد جيم (United Gym)", g:"النجف", t:"اللاعب الدولي حسنين نجاح، الكابتن حسين العكايشي", p:28},
+  {n:"جيم مهند (Gym Mohannad)", g:"النجف", t:"الكابتن مهند الغزالي، الكابتن أحمد الياسري", p:18},
+  {n:"قاعة البطل الدولي محمد حسون", g:"النجف", t:"البطل الدولي محمد حسون، الكابتن حسن الشاوي", p:30},
+  {n:"جيم الغدير (Al-Ghadir Gym)", g:"النجف", t:"الكابتن عادل الكعبي، الكابتن حيدر الجبوري", p:16},
+  {n:"لايون جيم (Lion Gym)", g:"كربلاء", t:"الكابتن أمير الأسدي، الكابتن حيدر الكربلائي", p:18},
+  {n:"جيم 24 (Gym 24)", g:"كربلاء", t:"الكابتن مصطفى الخفاجي، الكابتن أحمد الكناني", p:20},
+  {n:"مركز كربلاء للياقة البدنية", g:"كربلاء", t:"الكابتن حسين الحسيني، الكابتن كرار الموسوي", p:15},
+  {n:"جيم العميد (Al-Ameed Gym)", g:"كربلاء", t:"الكابتن حسن العرداوي، الكابتن علي الشيباني", p:17},
+  {n:"مركز الجامعة للرشاقة والقوة", g:"نينوى", t:"الكابتن يونس الحداد، الكابتن محمود العبيدي", p:14},
+  {n:"قاعة الحدباء لكمال الأجسام", g:"نينوى", t:"الكابتن عمر طارق، الكابتن بلال الرمضاني", p:16},
+  {n:"جيم الموصل الدولي", g:"نينوى", t:"الكابتن إبراهيم يونس، الكابتن يحيى الطائي", p:20},
+  {n:"قاعة الغزلاني الرياضية", g:"نينوى", t:"الكابتن بشار السنجري، الكابتن مثنى الحديدي", p:15},
+  {n:"عالمية الجيم (World Gym)", g:"كركوك", t:"الكابتن سيروان كمال، الكابتن آراز زيباري", p:18},
+  {n:"قاعة بابا كركر الرياضية", g:"كركوك", t:"الكابتن كاروان غفور، الكابتن ريبوار كركوكي", p:14},
+  {n:"كركوك أولمبيك جيم", g:"كركوك", t:"الكابتن أرسلان طارق، الكابتن هردي شوان", p:19},
+  {n:"دهوك سيتي جيم", g:"دهوك", t:"الكابتن دلشاد الإتروشي، الكابتن ألان زاخوي", p:17},
+  {n:"زاخو جيم (Zaxo Gym)", g:"دهوك", t:"الكابتن شيرزاد السندي، الكابتن نيجيرفان هركي", p:15},
+  {n:"سميل جيم (Semel Gym)", g:"دهوك", t:"الكابتن هوزان البرواري، الكابتن لزغين الدوسكي", p:13},
+  {n:"قاعة الأنبار الأولمبية", g:"الأنبار", t:"الكابتن ياسين الفهداوي، الكابتن عمر الدليمي", p:14},
+  {n:"قاعة الفلوجة لكمال الأجسام", g:"الأنبار", t:"الكابتن محمود الدليمي، الكابتن طارق العيساوي", p:13},
+  {n:"قاعة كليات المستقبل الجامعية", g:"بابل", t:"الدكتور مازن هادي الطائي، الكابتن علاء الجبوري", p:16},
+  {n:"جيم الحلة الرياضي", g:"بابل", t:"الكابتن حيدر الخفاجي، الكابتن ليث المعموري", p:15},
+  {n:"قاعة بعقوبة الأولمبية", g:"ديالى", t:"الكابتن عمر العزاوي، الكابتن عدي التميمي", p:14},
+  {n:"جيم ديالى الرياضي", g:"ديالى", t:"الكابتن منذر الخزرجي، الكابتن أسامة السعدي", p:13},
+  {n:"تكريت جيم (Tikrit Gym)", g:"صلاح الدين", t:"الكابتن سعد التكريتي، الكابتن وليد الدوري", p:15},
+  {n:"سامراء جيم (Samarra Gym)", g:"صلاح الدين", t:"الكابتن عباس العباسي، الكابتن عمار البدري", p:14},
+  {n:"قاعة الكوت الأولمبية", g:"واسط", t:"الكابتن مرتضى العوادي، الكابتن حيدر اللامي", p:15},
+  {n:"قاعة العمارة الرياضية", g:"ميسان", t:"الكابتن جعفر الدبيسي، الكابتن سجاد البهادلي", p:14},
+  {n:"الناصرية جيم (Nasiriyah Gym)", g:"ذي قار", t:"الكابتن رياض الغزي، الكابتن حازم الناصري", p:15},
+  {n:"قاعة السماوة لكمال الأجسام", g:"المثنى", t:"الكابتن علي السماوي، الكابتن حسين الحسني", p:13}
+];
+
+var POINTS_BALANCE = 1000; // عدّل هذا الرقم يدوياً لتحديث رصيد النقاط الظاهر في الشريط العلوي
+
+function renderGovCounts() {
+  var counts = {};
+  GYMS.forEach(function (x) { counts[x.g] = (counts[x.g] || 0) + 1; });
+  document.querySelectorAll('.gov-tile').forEach(function (tile) {
+    var c = counts[tile.dataset.gov] || 0;
+    tile.querySelector('.gov-tile-count').textContent = c;
+    if (c === 0) tile.classList.add('empty');
+  });
+}
+
+function showGov(gov) {
+  document.querySelectorAll('.gov-tile').forEach(function (t) {
+    t.classList.toggle('active', t.dataset.gov === gov);
+  });
+  var list = GYMS.filter(function (x) { return x.g === gov; });
+  var panel = document.getElementById('gov-list-panel');
+  var title = document.getElementById('gov-list-title');
+  var items = document.getElementById('gov-list-items');
+  title.textContent = gov + ' — ' + list.length + ' صالة';
+  items.innerHTML = '';
+  if (list.length === 0) {
+    var empty = document.createElement('p');
+    empty.style.cssText = 'color:#a3937f;margin:0;font-size:15px;';
+    empty.textContent = 'لا توجد صالات مسجلة في هذه المحافظة بعد.';
+    items.appendChild(empty);
+  } else {
+    list.forEach(function (x) {
+      var row = document.createElement('div');
+      row.className = 'gym-row';
+      row.style.cssText = 'background:#1d1815;border:1px solid rgba(245,237,228,0.08);border-radius:12px;padding:14px 18px;display:flex;flex-direction:column;';
+      var top = document.createElement('div');
+      top.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;';
+      var nameEl = document.createElement('span');
+      nameEl.style.cssText = 'font-weight:800;font-size:15px;';
+      nameEl.textContent = x.n;
+      var trainerEl = document.createElement('span');
+      trainerEl.style.cssText = 'color:#e08a3c;font-size:13.5px;font-weight:600;';
+      trainerEl.textContent = '🧑‍🏫 ' + x.t;
+      top.appendChild(nameEl);
+      top.appendChild(trainerEl);
+      var priceEl = document.createElement('div');
+      priceEl.className = 'gym-row-price';
+      priceEl.style.cssText = 'color:#f5ede4;font-size:14px;font-weight:800;';
+      priceEl.textContent = '💰 السعر: ' + x.p + ' نقطة / حصة';
+      row.appendChild(top);
+      row.appendChild(priceEl);
+      row.addEventListener('click', function () { row.classList.toggle('open'); });
+      items.appendChild(row);
+    });
+  }
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function closeGovPanel() {
+  document.getElementById('gov-list-panel').style.display = 'none';
+  document.querySelectorAll('.gov-tile').forEach(function (t) { t.classList.remove('active'); });
+}
+
+function renderPointsBalance() {
+  var el = document.getElementById('points-balance-value');
+  if (el) el.textContent = POINTS_BALANCE.toLocaleString('ar');
+}
+
+renderGovCounts();
+renderPointsBalance();
+applyGymVisibility();
+
+(function () {
+  var slides = document.querySelectorAll('#hero-carousel .hero-slide');
+  if (!slides.length) return;
+  var current = 0;
+  setInterval(function () {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 3000);
+})();
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeModal(overlay.id);
+  });
+});
+
+var selectedPayment = null;
+
+function openPaymentModal(name, price) {
+  selectedPayment = null;
+  document.getElementById('payment-plan-name').textContent = name;
+  document.getElementById('payment-plan-price').textContent = price;
+  document.querySelectorAll('.pay-option').forEach(function (el) { el.classList.remove('selected'); });
+  var btn = document.getElementById('payment-confirm-btn');
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+  document.getElementById('payment-options-wrap').style.display = '';
+  document.getElementById('payment-success').style.display = 'none';
+  openModal('payment-modal');
+}
+
+function selectPayment(method) {
+  selectedPayment = method;
+  document.querySelectorAll('.pay-option').forEach(function (el) {
+    el.classList.toggle('selected', el.dataset.method === method);
+  });
+  var btn = document.getElementById('payment-confirm-btn');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+}
+
+function confirmPayment() {
+  if (!selectedPayment) return;
+  document.getElementById('payment-options-wrap').style.display = 'none';
+  document.getElementById('payment-success').style.display = 'block';
+  setTimeout(function () { closeModal('payment-modal'); }, 2200);
+}
+
+function openSignupModal() {
+  var form = document.getElementById('signup-form');
+  form.reset();
+  form.style.display = '';
+  document.getElementById('signup-success').style.display = 'none';
+  openModal('signup-modal');
+}
+
+function submitSignup(e) {
+  e.preventDefault();
+  document.getElementById('signup-form').style.display = 'none';
+  document.getElementById('signup-success').style.display = 'block';
+  setTimeout(function () { closeModal('signup-modal'); }, 2200);
+  return false;
+}
+</script>
+</body>
+</html>
